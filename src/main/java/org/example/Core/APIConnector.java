@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Core;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -10,15 +10,18 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 
 public class APIConnector {
+    String apiKey;
+
+    public APIConnector(String apiKey){
+        this.apiKey = apiKey;
+    }
+
     public String getCalories(String food) throws ParseException, FileNotFoundException {
         String url = "https://calorieninjas.p.rapidapi.com/v1/nutrition?query=" + food;
-        String token = "token";
-
         HttpResponse<String> response = Unirest.get(url)
                 .header("X-RapidAPI-Host", "calorieninjas.p.rapidapi.com")
-                .header("X-RapidAPI-Key", token)
+                .header("X-RapidAPI-Key", apiKey)
                 .asString();
-
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse(response.getBody());
         JSONArray array = (JSONArray) jsonObject.get("items");
